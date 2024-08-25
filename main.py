@@ -275,7 +275,7 @@ async def remove(update: Update, context: CallbackContext) -> None:
         await update.message.reply_text(get_text(update, 'group_not_found'))
 
 async def set_command_center(update: Update, context: CallbackContext) -> None:
-    if update.effective_user.id == 858368230
+    if update.effective_user.id == 858368230:
         global COMMAND_CENTER
         chat_id = update.effective_chat.id
         COMMAND_CENTER = chat_id
