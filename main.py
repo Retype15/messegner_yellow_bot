@@ -291,7 +291,7 @@ async def set_command_center(update: Update, context: CallbackContext) -> None:
 cargar_datos_csv()
 app = ApplicationBuilder().token("7523544789:AAE6u1waeC3kL3LpZK_7-J_CNqNTdPbybG4").build()
 
-app.add_handler(CommandHandler("command_center", command_center))
+app.add_handler(CommandHandler("set_command_center", set_command_center))
 app.add_handler(CommandHandler("start", start))
 app.add_handler(CommandHandler("help", help))
 app.add_handler(CommandHandler("order", order))
