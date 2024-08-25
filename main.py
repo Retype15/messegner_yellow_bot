@@ -13,11 +13,9 @@ from texts import TEXTS
 
 GRUPOS = {}
 
-HELP = """
-Ayuda:
-    
+COMMAND_CENTER = None
+COMMAND_CENTER_FILE = 'command_center.csv'
 
-"""
 ##############################--SECURITY--################################################
 
 async def is_admin() -> bool:
@@ -73,6 +71,14 @@ def cargar_datos_csv() -> None:
                 }
     except Exception as e:
         print(f"Ocurrió un error al leer el archivo CSV: {e}")
+    global COMMAND_CENTER
+    try:
+        with open(COMMAND_CENTER_FILE, mode='r', encoding='utf-8') as file:
+            COMMAND_CENTER = int(file.read().strip())
+    except FileNotFoundError:
+        print("Archivo de centro de comando no encontrado, se creará uno nuevo al usar /set_command_center.")
+    except Exception as e:
+        print(f"Ocurrió un error al leer el archivo: {e}")
 
 ################################--LANGUAGE--##############################################
 
@@ -268,11 +274,24 @@ async def remove(update: Update, context: CallbackContext) -> None:
     else:
         await update.message.reply_text(get_text(update, 'group_not_found'))
 
+async def set_command_center(update: Update, context: CallbackContext) -> None:
+    if update.effective_user.id == 858368230
+        global COMMAND_CENTER
+        chat_id = update.effective_chat.id
+        COMMAND_CENTER = chat_id
+        with open(COMMAND_CENTER_FILE, mode='w', newline='', encoding='utf-8') as file:
+            file.write(str(COMMAND_CENTER))
+        await update.message.reply_text(get_text(update, 'command_center_deployed').format(chat_id=COMMAND_CENTER))
+    else:
+        await update.message.reply_text(get_text(update, 'no_permission'))
+
+
 #############################--MAIN--####################################################
 
 cargar_datos_csv()
 app = ApplicationBuilder().token("7523544789:AAE6u1waeC3kL3LpZK_7-J_CNqNTdPbybG4").build()
 
+app.add_handler(CommandHandler("command_center", command_center))
 app.add_handler(CommandHandler("start", start))
 app.add_handler(CommandHandler("help", help))
 app.add_handler(CommandHandler("order", order))

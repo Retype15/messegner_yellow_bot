@@ -20,6 +20,7 @@ TEXTS = {
         'button_has_pressed': "¡Ya has presionado este botón antes! 🎉",
         'group_not_found': "No se encontró el grupo correspondiente.",
         'group_has_eliminated': "Grupo '{nombre_grupo}' eliminado.",
+        'command_center_deployed': "El centro de comando se ha establecido con éxito en este chat (ID: {chat_id})."
         'default': "ERROR:XXX>Lo siento, el texto solicitado no está disponible.",
         'help_message': (
             'Ayuda:\n'
