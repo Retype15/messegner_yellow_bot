@@ -35,14 +35,14 @@ def get_text(update: Update, key):
     lang = ""
     ids = 0.0
     chat_id = update.effective_chat.id
+    names = ""
     for name, datos in GRUPOS.items():
         if datos['chat_id'] == chat_id:
+            names = name
             lang = GRUPOS[name]['lang']
             return TEXTS[lang].get(key, TEXTS[lang]['default'])
     
     lang = detect_language(update.effective_user.language_code)
-    GRUPOS[name]['lang'] = lang  # Guardar la detección automática en el diccionario
-        
     return TEXTS[lang].get(key, TEXTS[lang]['default'])
 
 def guardar_datos_csv():
