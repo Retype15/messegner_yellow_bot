@@ -133,7 +133,7 @@ async def reset(update: Update, context: CallbackContext) -> None:
     await update.message.reply_text(get_text(update, 'reset_info'))
 
 async def order(update: Update, context: CallbackContext) -> None:
-    if not is_admin: return []
+    if not is_admin and COMMAND_CENTER != update.effective_chat.id: return []
     bot: Bot = context.bot
 
     # Verificar que el mensaje esté citado
