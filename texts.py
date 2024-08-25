@@ -20,7 +20,7 @@ TEXTS = {
         'button_has_pressed': "¡Ya has presionado este botón antes! 🎉",
         'group_not_found': "No se encontró el grupo correspondiente.",
         'group_has_eliminated': "Grupo '{nombre_grupo}' eliminado.",
-        'command_center_deployed': "El centro de comando se ha establecido con éxito en este chat (ID: {chat_id})."
+        'command_center_deployed': "El centro de comando se ha establecido con éxito en este chat (ID: {chat_id}).",
         'default': "ERROR:XXX>Lo siento, el texto solicitado no está disponible.",
         'help_message': (
             'Ayuda:\n'
@@ -52,6 +52,7 @@ TEXTS = {
         'button_has_pressed': "You have already pressed this button before! 🎉",
         'group_not_found': "No corresponding group was found.",
         'group_has_eliminated': "Group '{nombre_grupo}' has been deleted.",
+        'command_center_deployed': "The command center has been successfully set in this chat (ID: {chat_id}).",
         'default': "ERROR:XXX>Sorry, the requested text is not available.",
         'help_message': (
             'Help:\n'
@@ -83,6 +84,7 @@ TEXTS = {
         'button_has_pressed': "Вы уже нажали эту кнопку ранее! 🎉",
         'group_not_found': "Соответствующая группа не найдена.",
         'group_has_eliminated': "Группа '{nombre_grupo}' удалена.",
+        'command_center_deployed': "Центр управления успешно установлен в этом чате (ID: {chat_id})."
         'default': "ОШИБКА:XXX>Извините, запрашиваемый текст недоступен.",
         'help_message': (
             'Помощь:\n'
