@@ -33,8 +33,8 @@ TEXTS = {
         ),
     },
     'en': {
-        'welcome': "HELLO, I'm Emi the war messenger! I make sure that all battle orders reach all our squads without delay!"
-        'no_permission': "You don't have permission to use this command.",
+        'welcome': "HELLO, I\'m Emi the war messenger! I make sure that all battle orders reach all our squads without delay!"
+        'no_permission': "You don\'t have permission to use this command.",
         'language_selected': "You have selected English, great!",
         'language_non_exist': "Unrecognized language, currently only available (en, es, ru).",
         'set_language_bad': "Please provide your language correctly! Example: (/set_language en)",
