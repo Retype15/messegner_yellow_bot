@@ -1,0 +1,9 @@
+.venv
+venv/
+env/
+.pyc
+__pycache__/
+.vscode/
+.idea/
+command_center.csv
+grupos_data.csv
