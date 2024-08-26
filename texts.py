@@ -1,7 +1,7 @@
 
 TEXTS = {
     'es': {
-        'welcome': "HOLA, soy Emi la mensajera! me encargo de que todas las órdenes de batalla lleguen a todos sin retraso!",
+        'welcome': "HOLA, soy Emi la mensajera de guerra! y me encargo de que todas las órdenes de batalla lleguen a todos nuestros escuadrones sin retraso!",
         'no_permission': "No tienes permisos para usar este comando.",
         'language_selected': "Has seleccionado el idioma español, ¡genial!",
         'language_non_exist': "Lenguaje no reconocido, por el momento solo está disponible (en, es, ru).",
@@ -33,7 +33,7 @@ TEXTS = {
         ),
     },
     'en': {
-        'welcome': "HELLO, I am Emi the messenger of war! I make sure that all battle orders reach everyone without delay!",
+        'welcome': "HELLO, I'm Emi the war messenger! I make sure that all battle orders reach all our squads without delay!"
         'no_permission': "You don't have permission to use this command.",
         'language_selected': "You have selected English, great!",
         'language_non_exist': "Unrecognized language, currently only available (en, es, ru).",
@@ -65,7 +65,7 @@ TEXTS = {
         ),
     },
     'ru': {
-        'welcome': "ПРИВЕТ, я BOT-посланник! Я забочусь о том, чтобы все боевые приказы доходили до всех без задержек!",
+        'welcome': "ПРИВЕТ, я Эми, военный посланник! Я забочусь о том, чтобы все боевые приказы доходили до всех наших отрядов без задержек!",
         'no_permission': "У вас нет прав на использование этой команды.",
         'language_selected': "Вы выбрали русский язык, отлично!",
         'language_non_exist': "Язык не распознан, в настоящее время доступен только (en, es, ru).",
