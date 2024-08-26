@@ -21,7 +21,7 @@ TEXTS = {
         'group_not_found': "No se encontró el grupo correspondiente.",
         'group_has_eliminated': "Grupo '{nombre_grupo}' eliminado.",
         'command_center_deployed': "El centro de comando se ha establecido con éxito en este chat (ID: {chat_id}).",
-        'default': "ERROR:XXX>Lo siento, el texto solicitado no está disponible.",
+        'default': "ERROR:{error}>Lo siento, el texto solicitado no está disponible.",
         'help_message': (
             'Ayuda:\n'
             'Usa /order + <escuadrones> para publicar una orden en su respectivo grupo\n'
@@ -33,7 +33,7 @@ TEXTS = {
         ),
     },
     'en': {
-        'welcome': "HELLO, I am the Messenger BOT! I make sure that all battle orders reach everyone without delay!",
+        'welcome': "HELLO, I am Emi the messenger of war! I make sure that all battle orders reach everyone without delay!",
         'no_permission': "You don't have permission to use this command.",
         'language_selected': "You have selected English, great!",
         'language_non_exist': "Unrecognized language, currently only available (en, es, ru).",
@@ -53,7 +53,7 @@ TEXTS = {
         'group_not_found': "No corresponding group was found.",
         'group_has_eliminated': "Group '{nombre_grupo}' has been deleted.",
         'command_center_deployed': "The command center has been successfully set in this chat (ID: {chat_id}).",
-        'default': "ERROR:XXX>Sorry, the requested text is not available.",
+        'default': "ERROR:{error}>Sorry, the requested text is not available.",
         'help_message': (
             'Help:\n'
             'Use /order + <squads> to publish an order in their respective group\n'
@@ -85,7 +85,7 @@ TEXTS = {
         'group_not_found': "Соответствующая группа не найдена.",
         'group_has_eliminated': "Группа '{nombre_grupo}' удалена.",
         'command_center_deployed': "Центр управления успешно установлен в этом чате (ID: {chat_id}).",
-        'default': "ОШИБКА:XXX>Извините, запрашиваемый текст недоступен.",
+        'default': "ОШИБКА:{error}>Извините, запрашиваемый текст недоступен.",
         'help_message': (
             'Помощь:\n'
             'Используйте /order + <отряды>, чтобы опубликовать приказ в соответствующей группе\n'

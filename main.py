@@ -25,8 +25,8 @@ async def is_admin(update, context) -> bool:
     # Verificar si el usuario es un administrador en el grupo
     chat_member = await context.bot.get_chat_member(chat_id, user_id)
     if chat_member.status in ['administrator', 'creator']:
-        return 1
-    return 0
+        return True
+    return False
     
 
 #############################--FUNCIONES--################################################
@@ -44,7 +44,7 @@ def get_text(update: Update, key):
             return TEXTS[lang].get(key, TEXTS[lang]['default'])
     
     lang = detect_language(update.effective_user.language_code)
-    return TEXTS[lang].get(key, TEXTS[lang]['default'])
+    return TEXTS[lang].get(key, TEXTS[lang]['default'].format(key))
 
 def guardar_datos_csv():
     with open('grupos_data.csv', mode='w', newline='', encoding='utf-8') as file:
@@ -85,8 +85,9 @@ def cargar_datos_csv() -> None:
 
 async def set_language(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None: # Comando para establecer el idioma
     if not await is_admin(update, context) or COMMAND_CENTER_ID != update.effective_chat.id:
-        update.message.reply_text(get_text(update, 'no_permisson'))
+        await update.message.reply_text(get_text(update, 'no_permission'))
         return []
+    
     chat_id = update.effective_chat.id
     name = ""
     for nombre, datos in GRUPOS.items():
@@ -127,10 +128,16 @@ def detect_language(language_code):
 
 ################################--BOT--###################################################
 
+async def start(update: Update, context: CallbackContext) -> None:
+    await update.message.reply_text(get_text(update, 'welcome'))
+
+async def help(update: Update, context: CallbackContext) -> None:
+    await update.message.reply_text(get_text(update, 'help_message'))
+
 # Función para reiniciar la información de todos los grupos
 async def reset(update: Update, context: CallbackContext) -> None:
     if not await is_admin(update, context) or COMMAND_CENTER_ID != update.effective_chat.id:
-        update.message.reply_text(get_text(update, 'no_permisson'))
+        await update.message.reply_text(get_text(update, 'no_permission'))
         return []
     for nombre, datos in GRUPOS.items():
         datos['count'] = 0
@@ -139,7 +146,7 @@ async def reset(update: Update, context: CallbackContext) -> None:
 
 async def order(update: Update, context: CallbackContext) -> None:
     if not await is_admin(update, context) or COMMAND_CENTER_ID != update.effective_chat.id:
-        update.message.reply_text(get_text(update, 'no_permisson'))
+        await update.message.reply_text(get_text(update, 'no_permission').format(error="sin permiso"))
         return []
     bot: Bot = context.bot
 
@@ -163,44 +170,35 @@ async def order(update: Update, context: CallbackContext) -> None:
 
     # Obtener los nombres de los grupos
     grupos = partes[1].split(',')
-
-    # Enviar el mensaje a los grupos especificados
-    for grupo in grupos:
-        grupo = grupo.strip()  # Eliminar espacios adicionales
-        if grupo == 'ALL':
-            # Enviar mensaje a todos los grupos
-            for nombre, datos in GRUPOS.items():
-                chat_id = datos['chat_id']
-                text = GoogleTranslator(source='auto', target= str(GRUPOS[nombre]['lang'])).translate(mensaje)
-                text += get_text(update, 'order_no_participants')
-                keyboard = [[InlineKeyboardButton(get_text(update, 'i_will_participate'), callback_data=str(chat_id))]]
-                reply_markup = InlineKeyboardMarkup(keyboard)
-                GRUPOS[nombre]['count'] = 0
-                GRUPOS[nombre]['users'] = []
-                await bot.send_message(chat_id=chat_id, text=text, reply_markup=reply_markup)
-        elif grupo in GRUPOS:
-            # Enviar mensaje al grupo especificado
-            chat_id = GRUPOS[grupo]['chat_id']
-            text = GoogleTranslator(source='auto', target= str(GRUPOS[grupo]['lang'])).translate(mensaje)
+    
+    if grupos[0] == 'ALL':
+        for nombre, datos in GRUPOS.items():
+            chat_id = datos['chat_id']
+            text = GoogleTranslator(source='auto', target= str(GRUPOS[nombre]['lang'])).translate(mensaje)
             text += get_text(update, 'order_no_participants')
             keyboard = [[InlineKeyboardButton(get_text(update, 'i_will_participate'), callback_data=str(chat_id))]]
             reply_markup = InlineKeyboardMarkup(keyboard)
-            GRUPOS[grupo]['count'] = 0
+            GRUPOS[nombre]['count'] = 0
             GRUPOS[nombre]['users'] = []
             await bot.send_message(chat_id=chat_id, text=text, reply_markup=reply_markup)
-        else:
-            await update.message.reply_text(get_text(update,'order_no_group_founded').format(grupo=grupo))
-
-# Función para agregar el chat al bot_data y al diccionario GRUPOS
-async def start(update: Update, context: CallbackContext) -> None:
-    await update.message.reply_text(get_text(update, 'welcome'))
-
-async def help(update: Update, context: CallbackContext) -> None:
-    await update.message.reply_text(get_text(update, 'help_message'))
+    else:
+        for grupo in grupos:
+            if grupo in GRUPOS:
+                # Enviar mensaje al grupo especificado
+                chat_id = GRUPOS[grupo]['chat_id']
+                text = GoogleTranslator(source='auto', target= str(GRUPOS[grupo]['lang'])).translate(mensaje)
+                text += get_text(update, 'order_no_participants')
+                keyboard = [[InlineKeyboardButton(get_text(update, 'i_will_participate'), callback_data=str(chat_id))]]
+                reply_markup = InlineKeyboardMarkup(keyboard)
+                GRUPOS[grupo]['count'] = 0
+                GRUPOS[grupo]['users'] = []
+                await bot.send_message(chat_id=chat_id, text=text, reply_markup=reply_markup)
+            else:
+                await update.message.reply_text(get_text(update,'order_no_group_founded').format(grupo=grupo))
 
 async def register(update: Update, context: CallbackContext) -> None:
     if not await is_admin(update, context) or COMMAND_CENTER_ID != update.effective_chat.id:
-        update.message.reply_text(get_text(update, 'no_permisson'))
+        update.message.reply_text(get_text(update, 'no_permission'))
         return []
     chat_id = update.effective_chat.id
     chat_title = update.effective_chat.title or "No name"
@@ -230,7 +228,9 @@ async def register(update: Update, context: CallbackContext) -> None:
     
 async def squads(update: Update, context: CallbackContext) -> None:
     if not await is_admin(update, context) or COMMAND_CENTER_ID != update.effective_chat.id:
-        update.message.reply_text(get_text(update, 'no_permisson'))
+        ses = COMMAND_CENTER_ID != update.effective_chat.id
+        es_admin = await is_admin(update, context)
+        await update.message.reply_text(get_text(update, 'no_permission') + str(es_admin) + " - " + str(ses))
         return []
     if not GRUPOS:
         await update.message.reply_text(get_text(update, 'no_group_saved'))
@@ -276,8 +276,8 @@ async def boton_callback(update: Update, context: CallbackContext) -> None:
                     ))
 
 async def remove(update: Update, context: CallbackContext) -> None:
-    if not await is_admin(update, context) or COMMAND_CENTER_ID != update.effective_chat.id:
-        update.message.reply_text(get_text(update, 'no_permisson'))
+    if not await is_admin(update, context):
+        await update.message.reply_text(get_text(update, 'no_permission'))
         return []
     nombre_grupo = ' '.join(context.args).strip()
     if nombre_grupo in GRUPOS:
@@ -300,11 +300,12 @@ async def set_command_center(update: Update, context: CallbackContext) -> None:
 
 
 #############################--MAIN--####################################################
-test_bot = "7523544789:AAE6u1waeC3kL3LpZK_7-J_CNqNTdPbybG4"
-messegner_bot = "7316602583:AAES7q0MDi0On0HUnZE8lw80sm5wFNe_A8A"
 
 cargar_datos_csv()
-app = ApplicationBuilder().token(test_bot ).build()
+
+test_bot = "7523544789:AAE6u1waeC3kL3LpZK_7-J_CNqNTdPbybG4"
+messegner_bot = "7316602583:AAES7q0MDi0On0HUnZE8lw80sm5wFNe_A8A"
+app = ApplicationBuilder().token(test_bot).build()
 
 app.add_handler(CommandHandler("set_command_center", set_command_center))
 app.add_handler(CommandHandler("start", start))
