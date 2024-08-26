@@ -13,20 +13,21 @@ from texts import TEXTS
 
 GRUPOS = {}
 
-COMMAND_CENTER = None
-COMMAND_CENTER_FILE = 'command_center.csv'
+COMMAND_CENTER_ID = None
+COMMAND_CENTER_ID_FILE = 'command_center.csv'
 
 ##############################--SECURITY--################################################
 
-async def is_admin() -> bool:
+async def is_admin(update, context) -> bool:
     user_id = update.effective_user.id
     chat_id = update.effective_chat.id
 
     # Verificar si el usuario es un administrador en el grupo
     chat_member = await context.bot.get_chat_member(chat_id, user_id)
-    if chat_member.status not in ['administrator', 'creator']:
-        await update.message.reply_text(get_text(update,'no_permission'))
-        return
+    if chat_member.status in ['administrator', 'creator']:
+        return 1
+    return 0
+    
 
 #############################--FUNCIONES--################################################
 
@@ -71,10 +72,10 @@ def cargar_datos_csv() -> None:
                 }
     except Exception as e:
         print(f"Ocurrió un error al leer el archivo CSV: {e}")
-    global COMMAND_CENTER
+    global COMMAND_CENTER_ID
     try:
-        with open(COMMAND_CENTER_FILE, mode='r', encoding='utf-8') as file:
-            COMMAND_CENTER = int(file.read().strip())
+        with open(COMMAND_CENTER_ID_FILE, mode='r', encoding='utf-8') as file:
+            COMMAND_CENTER_ID = int(file.read().strip())
     except FileNotFoundError:
         print("Archivo de centro de comando no encontrado, se creará uno nuevo al usar /set_command_center.")
     except Exception as e:
@@ -83,7 +84,9 @@ def cargar_datos_csv() -> None:
 ################################--LANGUAGE--##############################################
 
 async def set_language(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None: # Comando para establecer el idioma
-    if not is_admin: return []
+    if not await is_admin(update, context) or COMMAND_CENTER_ID != update.effective_chat.id:
+        update.message.reply_text(get_text(update, 'no_permisson'))
+        return []
     chat_id = update.effective_chat.id
     name = ""
     for nombre, datos in GRUPOS.items():
@@ -126,14 +129,18 @@ def detect_language(language_code):
 
 # Función para reiniciar la información de todos los grupos
 async def reset(update: Update, context: CallbackContext) -> None:
-    if not is_admin: return []
+    if not await is_admin(update, context) or COMMAND_CENTER_ID != update.effective_chat.id:
+        update.message.reply_text(get_text(update, 'no_permisson'))
+        return []
     for nombre, datos in GRUPOS.items():
         datos['count'] = 0
         datos['users'] = []
     await update.message.reply_text(get_text(update, 'reset_info'))
 
 async def order(update: Update, context: CallbackContext) -> None:
-    if not is_admin and COMMAND_CENTER != update.effective_chat.id: return []
+    if not await is_admin(update, context) or COMMAND_CENTER_ID != update.effective_chat.id:
+        update.message.reply_text(get_text(update, 'no_permisson'))
+        return []
     bot: Bot = context.bot
 
     # Verificar que el mensaje esté citado
@@ -192,7 +199,9 @@ async def help(update: Update, context: CallbackContext) -> None:
     await update.message.reply_text(get_text(update, 'help_message'))
 
 async def register(update: Update, context: CallbackContext) -> None:
-    if not is_admin: return []
+    if not await is_admin(update, context) or COMMAND_CENTER_ID != update.effective_chat.id:
+        update.message.reply_text(get_text(update, 'no_permisson'))
+        return []
     chat_id = update.effective_chat.id
     chat_title = update.effective_chat.title or "No name"
     nombre_grupo = ''
@@ -220,7 +229,9 @@ async def register(update: Update, context: CallbackContext) -> None:
     await update.message.reply_text(get_text(update, 'group_saved').format(nombre_grupo=nombre_grupo))
     
 async def squads(update: Update, context: CallbackContext) -> None:
-    if not is_admin: return []
+    if not await is_admin(update, context) or COMMAND_CENTER_ID != update.effective_chat.id:
+        update.message.reply_text(get_text(update, 'no_permisson'))
+        return []
     if not GRUPOS:
         await update.message.reply_text(get_text(update, 'no_group_saved'))
         return
@@ -265,7 +276,9 @@ async def boton_callback(update: Update, context: CallbackContext) -> None:
                     ))
 
 async def remove(update: Update, context: CallbackContext) -> None:
-    if not is_admin: return []
+    if not await is_admin(update, context) or COMMAND_CENTER_ID != update.effective_chat.id:
+        update.message.reply_text(get_text(update, 'no_permisson'))
+        return []
     nombre_grupo = ' '.join(context.args).strip()
     if nombre_grupo in GRUPOS:
         del GRUPOS[nombre_grupo]
@@ -276,12 +289,12 @@ async def remove(update: Update, context: CallbackContext) -> None:
 
 async def set_command_center(update: Update, context: CallbackContext) -> None:
     if update.effective_user.id == 858368230:
-        global COMMAND_CENTER
+        global COMMAND_CENTER_ID
         chat_id = update.effective_chat.id
-        COMMAND_CENTER = chat_id
-        with open(COMMAND_CENTER_FILE, mode='w', newline='', encoding='utf-8') as file:
-            file.write(str(COMMAND_CENTER))
-        await update.message.reply_text(get_text(update, 'command_center_deployed').format(chat_id=COMMAND_CENTER))
+        COMMAND_CENTER_ID = chat_id
+        with open(COMMAND_CENTER_ID_FILE, mode='w', newline='', encoding='utf-8') as file:
+            file.write(str(COMMAND_CENTER_ID))
+        await update.message.reply_text(get_text(update, 'command_center_deployed').format(chat_id=COMMAND_CENTER_ID))
     else:
         await update.message.reply_text(get_text(update, 'no_permission'))
 
@@ -291,7 +304,7 @@ test_bot = "7523544789:AAE6u1waeC3kL3LpZK_7-J_CNqNTdPbybG4"
 messegner_bot = "7316602583:AAES7q0MDi0On0HUnZE8lw80sm5wFNe_A8A"
 
 cargar_datos_csv()
-app = ApplicationBuilder().token(messegner_bot).build()
+app = ApplicationBuilder().token(test_bot ).build()
 
 app.add_handler(CommandHandler("set_command_center", set_command_center))
 app.add_handler(CommandHandler("start", start))

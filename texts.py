@@ -1,7 +1,7 @@
 
 TEXTS = {
     'es': {
-        'welcome': "HOLA, soy el BOT mensajero! me encargo de que todas las órdenes de batalla lleguen a todos sin retraso!",
+        'welcome': "HOLA, soy Emi la mensajera! me encargo de que todas las órdenes de batalla lleguen a todos sin retraso!",
         'no_permission': "No tienes permisos para usar este comando.",
         'language_selected': "Has seleccionado el idioma español, ¡genial!",
         'language_non_exist': "Lenguaje no reconocido, por el momento solo está disponible (en, es, ru).",
@@ -9,7 +9,7 @@ TEXTS = {
         'reset_info': "¡Toda la información de los grupos ha sido reiniciada!",
         'order_no_cited': "¡Por favor, cita el mensaje que quieres enviar!",
         'order_incorrect': "Uso incorrecto. Usa: /order <grupos>... Respondiendo a un mensaje",
-        'order_no_participants': "\nxx-xx-xx-xx-xx-xx-xx-xx-xx-xx-xx\nAún no hay participantes, ¿a qué esperas? ¡Únete al plan de batalla!",
+        'order_no_participants': "\n\nAún no hay participantes, ¿a qué esperas? ¡Únete al plan de batalla!",
         'i_will_participate': "¡Yo participaré!",
         'order_no_group_founded': "Grupo '{grupo}' no encontrado.",
         'group_saved': "Grupo guardado como '{nombre_grupo}'.",
@@ -41,7 +41,7 @@ TEXTS = {
         'reset_info': "All group information has been reset!",
         'order_no_cited': "Please quote the message you want to send!",
         'order_incorrect': "Incorrect use. Use: /order <groups>... While replying to a message",
-        'order_no_participants': "\nxx-xx-xx-xx-xx-xx-xx-xx-xx-xx-xx\nNo participants yet, what are you waiting for? Join the battle plan!",
+        'order_no_participants': "\n\nNo participants yet, what are you waiting for? Join the battle plan!",
         'i_will_participate': "I will participate!",
         'order_no_group_founded': "Group '{grupo}' not found.",
         'group_saved': "Group saved as '{nombre_grupo}'.",
@@ -73,7 +73,7 @@ TEXTS = {
         'reset_info': "Вся информация о группах была сброшена!",
         'order_no_cited': "Пожалуйста, цитируйте сообщение, которое хотите отправить!",
         'order_incorrect': "Неправильное использование. Используйте: /order <группы>... Отвечая на сообщение",
-        'order_no_participants': "\nxx-xx-xx-xx-xx-xx-xx-xx-xx-xx-xx\nПока нет участников, чего вы ждете? Присоединяйтесь к боевому плану!",
+        'order_no_participants': "\n\nПока нет участников, чего вы ждете? Присоединяйтесь к боевому плану!",
         'i_will_participate': "Я буду участвовать!",
         'order_no_group_founded': "Группа '{grupo}' не найдена.",
         'group_saved': "Группа сохранена как '{nombre_grupo}'.",
