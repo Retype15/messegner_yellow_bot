@@ -16,6 +16,8 @@ GRUPOS = {}
 COMMAND_CENTER_ID = None
 COMMAND_CENTER_ID_FILE = 'command_center.csv'
 
+print("\nIniciando servicios...")
+
 ##############################--SECURITY--################################################
 
 async def is_admin(update, context) -> bool:
@@ -200,39 +202,39 @@ async def order(update: Update, context: CallbackContext) -> None:
 
 async def register(update: Update, context: CallbackContext) -> None:
     if not await is_admin(update, context) or COMMAND_CENTER_ID != update.effective_chat.id:
-        update.message.reply_text(get_text(update, 'no_permission'))
+        await update.message.reply_text(get_text(update, 'no_permission'))
         return []
     chat_id = update.effective_chat.id
     chat_title = update.effective_chat.title or "No name"
-    nombre_grupo = ''
+    group_name = ''
     lang = ''
     
     # Obtener el nombre del grupo desde el comando
     if context.args:
         context = ' '.join(context.args).strip()
         parts = context.split(' ', 2)
-        nombre_grupo = parts[0] if len(parts) > 0 else chat_title
+        group_name = parts[0] if len(parts) > 0 else chat_title
         lang = parts[1] if len(parts) > 1 else 'en'
     else:
-        nombre_grupo = chat_title
+        group_name = chat_title
         lang = 'en'
 
     # Guardar el grupo en GRUPOS
-    GRUPOS[nombre_grupo] = {
+    GRUPOS[group_name] = {
         'chat_id': chat_id,
         'count': 0,
         'lang': lang,
         'users': []
     }
-    guardar_datos_csv()
     
-    await update.message.reply_text(get_text(update, 'group_saved').format(nombre_grupo=nombre_grupo))
+    guardar_datos_csv()
+    user_id = update.effective_user.id
+    await context.bot.send_message(chat_id=COMMAND_CENTER_ID, text=get_text(update, 'advice_group_saved').format(user=user_id, group_name=group_name))
+    await update.message.reply_text(get_text(update, 'group_saved').format(group_name=group_name))
     
 async def squads(update: Update, context: CallbackContext) -> None:
     if not await is_admin(update, context) or COMMAND_CENTER_ID != update.effective_chat.id:
-        ses = COMMAND_CENTER_ID != update.effective_chat.id
-        es_admin = await is_admin(update, context)
-        await update.message.reply_text(get_text(update, 'no_permission') + str(es_admin) + " - " + str(ses))
+        await update.message.reply_text(get_text(update, 'no_permission'))
         return []
     if not GRUPOS:
         await update.message.reply_text(get_text(update, 'no_group_saved'))
@@ -281,10 +283,10 @@ async def remove(update: Update, context: CallbackContext) -> None:
     if not await is_admin(update, context):
         await update.message.reply_text(get_text(update, 'no_permission'))
         return []
-    nombre_grupo = ' '.join(context.args).strip()
-    if nombre_grupo in GRUPOS:
-        del GRUPOS[nombre_grupo]
-        await update.message.reply_text(get_text(update, 'group_has_eliminated').format(nombre_grupo=nombre_grupo))
+    group_name = ' '.join(context.args).strip()
+    if group_name in GRUPOS:
+        del GRUPOS[group_name]
+        await update.message.reply_text(get_text(update, 'group_has_eliminated').format(group_name=group_name))
         guardar_datos_csv()
     else:
         await update.message.reply_text(get_text(update, 'group_not_found'))
@@ -303,7 +305,6 @@ async def set_command_center(update: Update, context: CallbackContext) -> None:
 
 #############################--MAIN--####################################################
 
-print("\nIniciando servicios...")
 cargar_datos_csv()
 
 test_bot = "7523544789:AAE6u1waeC3kL3LpZK_7-J_CNqNTdPbybG4"
