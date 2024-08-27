@@ -187,7 +187,7 @@ async def order(update: Update, context: CallbackContext) -> None:
             GRUPOS[nombre]['count'] = 0
             GRUPOS[nombre]['users'] = []
             msg = await bot.send_message(chat_id=chat_id, text=text, reply_markup=reply_markup)
-            await context.bot.pin_chat_message(chat_id=chat_id, message_id=msg.message_id)
+            await bot.pin_chat_message(chat_id=chat_id, message_id=msg.message_id)
     else:
         for grupo in grupos:
             if grupo in GRUPOS:
@@ -217,6 +217,13 @@ async def register(update: Update, context: CallbackContext) -> None:
     if context.args:
         contextE = ' '.join(context.args).strip()
         parts = contextE.split(' ', 2)
+        if len(parts) == 1 or len(parts) > 2:
+            await update.message.reply_text(get_text(update, 'default'))
+            return []
+        if parts in GRUPOS.items():
+            await update.message.reply_text(get_text(update, 'squad_name_repeated'))
+            return []
+        
         group_name = parts[0] if len(parts) > 0 else chat_title
         lang = parts[1] if len(parts) > 1 else 'en'
     else:
@@ -299,12 +306,13 @@ async def remove(update: Update, context: CallbackContext) -> None:
         return []
     group_name = ' '.join(context.args).strip()
     if group_name in GRUPOS:
-        if GRUPOS[group_name]['chat_id'] != update.effective_chat.id or COMMAND_CENTER_ID != update.effective_chat.id:
+        if GRUPOS[group_name]['chat_id'] == update.effective_chat.id or COMMAND_CENTER_ID == update.effective_chat.id:
+            del GRUPOS[group_name]
+            await update.message.reply_text(get_text(update, 'group_has_eliminated').format(group_name=group_name))
+            guardar_datos_csv()
+        else:
             await update.message.reply_text(get_text(update, 'no_permission'))
             return []
-        del GRUPOS[group_name]
-        await update.message.reply_text(get_text(update, 'group_has_eliminated').format(group_name=group_name))
-        guardar_datos_csv()
     else:
         await update.message.reply_text(get_text(update, 'group_not_found'))
 
