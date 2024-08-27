@@ -371,7 +371,7 @@ def register_shutdown(app: ApplicationBuilder):
 cargar_datos_csv()
 test_bot = "7523544789:AAE6u1waeC3kL3LpZK_7-J_CNqNTdPbybG4"
 messenger_bot = "7464240046:AAE_ZaNDZJvh-A-Y_wq3c6FnHwk_cB8zdc4"
-app = ApplicationBuilder().token(test_bot).build()
+app = ApplicationBuilder().token(messenger_bot).build()
 #git add . && git commit -m "v1.5" && git push origin master
 register_shutdown(app)
 
