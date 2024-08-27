@@ -299,7 +299,7 @@ async def remove(update: Update, context: CallbackContext) -> None:
         return []
     group_name = ' '.join(context.args).strip()
     if group_name in GRUPOS:
-        if GRUPOS[group_name]['Chat ID'] != update.effective_chat.id:
+        if GRUPOS[group_name]['chat_id'] != update.effective_chat.id or COMMAND_CENTER_ID == update.effective_chat.id:
             await update.message.reply_text(get_text(update, 'no_permission'))
             return []
         del GRUPOS[group_name]
