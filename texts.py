@@ -13,7 +13,7 @@ TEXTS = {
         'i_will_participate': "¡Yo participaré!",
         'order_no_group_founded': "Grupo '{grupo}' no encontrado.",
         'group_saved': "Grupo guardado como '{group_name}'.",
-        'advice_group_saved': "Advertencia, {user} ha registrado el grupo {name_group}. Si no es reconocido, usa:\n/remove {name_group}",
+        'advice_group_saved': "Advertencia, {user} ha registrado el grupo {name_group}. Si no es reconocido, usa:\n/remove {name_group2}",
         'no_group_saved': "No hay grupos guardados.",
         'actual_groups': "Grupos actuales:\n",
         'squads_info_group': "{name}: participantes: {count}, lenguaje: {lang}\n",

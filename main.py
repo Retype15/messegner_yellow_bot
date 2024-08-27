@@ -215,8 +215,9 @@ async def register(update: Update, context: CallbackContext) -> None:
     
     # Obtener el nombre del grupo desde el comando
     if context.args:
-        context = ' '.join(context.args).strip()
-        parts = context.split(' ', 2)
+        contextE = ' '.join(context.args).strip()
+        parts = contextE.split(' ', 2)
+        await update.message.reply_text(parts)
         group_name = parts[0] if len(parts) > 0 else chat_title
         lang = parts[1] if len(parts) > 1 else 'en'
     else:
@@ -233,7 +234,15 @@ async def register(update: Update, context: CallbackContext) -> None:
     
     guardar_datos_csv()
     user_id = update.effective_user.id
-    await context.bot.send_message(chat_id=COMMAND_CENTER_ID, text=get_text(update, 'advice_group_saved').format(user=user_id, group_name=group_name))
+    
+    await context.bot.send_message(
+        chat_id=COMMAND_CENTER_ID,
+        text=get_text(update, 'advice_group_saved').format(
+            user=user_id,
+            group_name=group_name,
+            group_name2=group_name
+        )
+    )
     await update.message.reply_text(get_text(update, 'group_saved').format(group_name=group_name))
     
 async def squads(update: Update, context: CallbackContext) -> None:
@@ -313,7 +322,7 @@ cargar_datos_csv()
 
 test_bot = "7523544789:AAE6u1waeC3kL3LpZK_7-J_CNqNTdPbybG4"
 messenger_bot = "7464240046:AAE_ZaNDZJvh-A-Y_wq3c6FnHwk_cB8zdc4"
-app = ApplicationBuilder().token(messenger_bot).build()
+app = ApplicationBuilder().token(test_bot).build()
 
 app.add_handler(CommandHandler("set_command_center", set_command_center))
 app.add_handler(CommandHandler("start", start))
