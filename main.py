@@ -86,7 +86,7 @@ def cargar_datos_csv() -> None:
 ################################--LANGUAGE--##############################################
 
 async def set_language(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None: # Comando para establecer el idioma
-    if not await is_admin(update, context) or COMMAND_CENTER_ID != update.effective_chat.id:
+    if not await is_admin(update, context):
         await update.message.reply_text(get_text(update, 'no_permission'))
         return []
     
@@ -134,6 +134,10 @@ async def start(update: Update, context: CallbackContext) -> None:
     await update.message.reply_text(get_text(update, 'welcome'))
 
 async def help(update: Update, context: CallbackContext) -> None:
+    if not await is_admin(update, context):
+        await update.message.reply_text(get_text(update, 'no_permission'))
+        return []
+    
     await update.message.reply_text(get_text(update, 'help_message'))
 
 # Función para reiniciar la información de todos los grupos
@@ -201,7 +205,7 @@ async def order(update: Update, context: CallbackContext) -> None:
                 await update.message.reply_text(get_text(update,'order_no_group_founded').format(grupo=grupo))
 
 async def register(update: Update, context: CallbackContext) -> None:
-    if not await is_admin(update, context) or COMMAND_CENTER_ID != update.effective_chat.id:
+    if not await is_admin(update, context):
         await update.message.reply_text(get_text(update, 'no_permission'))
         return []
     chat_id = update.effective_chat.id
