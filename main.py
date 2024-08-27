@@ -1,20 +1,34 @@
+import atexit
+import asyncio
 import csv
 from datetime import datetime
 from deep_translator import GoogleTranslator
+import logging
 import pytz
 import re
+import subprocess
 from telegram import Update, InputFile, InlineKeyboardButton, InlineKeyboardMarkup, Bot, BotCommand
-from telegram.ext import ApplicationBuilder,CallbackContext, CommandHandler, MessageHandler, filters, ContextTypes, CallbackQueryHandler, CallbackContext
+from telegram.ext import ApplicationBuilder,CallbackContext, CommandHandler, MessageHandler, filters, ContextTypes, CallbackQueryHandler, CallbackContext, Application
 from openpyxl import Workbook, load_workbook
 import os
 from texts import TEXTS
 
 #############################--GLOBAL-VARS--#############################################
 
+logging.basicConfig(level=logging.INFO,  # Solo INFO y niveles superiores
+                    format='%(asctime)s - %(levelname)s - %(message)s',
+                    handlers=[
+                        logging.FileHandler('shutdown.log'),  # Archivo de log
+                        logging.StreamHandler()  # Imprime en consola
+                    ])
+
+logging.getLogger('telegram').setLevel(logging.ERROR)
+
 GRUPOS = {}
 
 COMMAND_CENTER_ID = None
 COMMAND_CENTER_ID_FILE = 'command_center.csv'
+ME_ID = 858368230
 
 print("\nIniciando servicios...")
 
@@ -250,7 +264,6 @@ async def register(update: Update, context: CallbackContext) -> None:
             group_name2=group_name
         )
     )
-    
     await update.message.reply_text(get_text(update, 'group_saved').format(group_name=group_name))
     
 async def squads(update: Update, context: CallbackContext) -> None:
@@ -317,7 +330,7 @@ async def remove(update: Update, context: CallbackContext) -> None:
         await update.message.reply_text(get_text(update, 'group_not_found'))
 
 async def set_command_center(update: Update, context: CallbackContext) -> None:
-    if update.effective_user.id == 858368230:
+    if update.effective_user.id == ME_ID:
         global COMMAND_CENTER_ID
         chat_id = update.effective_chat.id
         COMMAND_CENTER_ID = chat_id
@@ -327,14 +340,40 @@ async def set_command_center(update: Update, context: CallbackContext) -> None:
     else:
         await update.message.reply_text(get_text(update, 'no_permission'))
 
+async def on_shutdown(app: ApplicationBuilder):
+    comando = "python main.py"
+    logging.info("Programa cerrado!\nIntentando abrir nuevamente...")
+    try:
+        resultado = subprocess.run(comando, shell=True, check=True, text=True, capture_output=True)
+        logging.info(f"\nSe ha reabierto correctamente! {resultado.stdout}")
+    except subprocess.CalledProcessError as e:
+        logging.error("Error al ejecutar el comando")
+        logging.error(f"Código de error: {e.returncode}")
+        logging.error(f"Salida del error: {e.stderr}")
+    except Exception as e:
+        logging.error(f"Ocurrió un error inesperado: {e}")
+
 
 #############################--MAIN--####################################################
 
-cargar_datos_csv()
+def register_shutdown(app: ApplicationBuilder):
+    def wrapper():
+        loop = asyncio.get_event_loop()
+        if loop.is_running():
+            # Crea una tarea para la función de apagado
+            loop.create_task(on_shutdown(app))
+        else:
+            # Si no hay loop corriendo, crea uno y ejecuta la tarea
+            asyncio.run(on_shutdown(app))
+    atexit.register(wrapper)
 
+
+cargar_datos_csv()
 test_bot = "7523544789:AAE6u1waeC3kL3LpZK_7-J_CNqNTdPbybG4"
 messenger_bot = "7464240046:AAE_ZaNDZJvh-A-Y_wq3c6FnHwk_cB8zdc4"
-app = ApplicationBuilder().token(messenger_bot).build()
+app = ApplicationBuilder().token(test_bot).build()
+#git add . && git commit -m "v1.5" && git push origin master
+register_shutdown(app)
 
 app.add_handler(CommandHandler("set_command_center", set_command_center))
 app.add_handler(CommandHandler("start", start))

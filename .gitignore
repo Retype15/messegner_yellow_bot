@@ -7,3 +7,4 @@ __pycache__/
 .idea/
 command_center.csv
 grupos_data.csv
+shutdown.log
