@@ -180,7 +180,8 @@ async def order(update: Update, context: CallbackContext) -> None:
             reply_markup = InlineKeyboardMarkup(keyboard)
             GRUPOS[nombre]['count'] = 0
             GRUPOS[nombre]['users'] = []
-            await bot.send_message(chat_id=chat_id, text=text, reply_markup=reply_markup)
+            msg = await bot.send_message(chat_id=chat_id, text=text, reply_markup=reply_markup)
+            await context.bot.pin_chat_message(chat_id=chat_id, message_id=msg.message_id)
     else:
         for grupo in grupos:
             if grupo in GRUPOS:
@@ -192,7 +193,8 @@ async def order(update: Update, context: CallbackContext) -> None:
                 reply_markup = InlineKeyboardMarkup(keyboard)
                 GRUPOS[grupo]['count'] = 0
                 GRUPOS[grupo]['users'] = []
-                await bot.send_message(chat_id=chat_id, text=text, reply_markup=reply_markup)
+                msg = await bot.send_message(chat_id=chat_id, text=text, reply_markup=reply_markup)
+                await context.bot.pin_chat_message(chat_id=chat_id, message_id=msg.message_id)
             else:
                 await update.message.reply_text(get_text(update,'order_no_group_founded').format(grupo=grupo))
 
@@ -301,6 +303,7 @@ async def set_command_center(update: Update, context: CallbackContext) -> None:
 
 #############################--MAIN--####################################################
 
+print("\nIniciando servicios...")
 cargar_datos_csv()
 
 test_bot = "7523544789:AAE6u1waeC3kL3LpZK_7-J_CNqNTdPbybG4"
@@ -318,4 +321,5 @@ app.add_handler(CommandHandler("remove", remove))
 app.add_handler(CommandHandler("set_language", set_language))
 app.add_handler(CallbackQueryHandler(boton_callback))
 
+print("\nServicio Iniciado!")
 app.run_polling()

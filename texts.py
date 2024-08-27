@@ -1,7 +1,7 @@
 
 TEXTS = {
     'es': {
-        'welcome': "HOLA, soy Emi la mensajera de guerra! y me encargo de que todas las órdenes de batalla lleguen a todos nuestros escuadrones sin retraso!",
+        'welcome': "Hola, soy Emi, la candidata a mensajera del reino amarillo, mucho gusto en conocerte! Los Shoguns del reino me dan las ordenes a mi y yo me encargo de repartirlas entre todos los escuadrones de forma muy rapida y sencilla, ademas de contar a los fuertes guerreros que estan preparados para luchar! Espero nos llevemos bien! 😊",
         'no_permission': "No tienes permisos para usar este comando.",
         'language_selected': "Has seleccionado el idioma español, ¡genial!",
         'language_non_exist': "Lenguaje no reconocido, por el momento solo está disponible (en, es, ru).",
@@ -33,7 +33,7 @@ TEXTS = {
         ),
     },
     'en': {
-        'welcome': "HELLO, I\'m Emi the war messenger! I make sure that all battle orders reach all our squads without delay!",
+        'welcome': "Hello, I\'m Emi, the candidate for the messenger of the Yellow Kingdom, nice to meet you! The Shoguns of the kingdom give me the orders, and I make sure to distribute them among all the squads quickly and easily, while also counting the strong warriors who are ready to fight! I hope we get along well! 😊",
         'no_permission': "You don\'t have permission to use this command.",
         'language_selected': "You have selected English, great!",
         'language_non_exist': "Unrecognized language, currently only available (en, es, ru).",
@@ -65,7 +65,7 @@ TEXTS = {
         ),
     },
     'ru': {
-        'welcome': "ПРИВЕТ, я Эми, военный посланник! Я забочусь о том, чтобы все боевые приказы доходили до всех наших отрядов без задержек!",
+        'welcome': "Привет, я Эми, кандидат в посланники Желтого Королевства, приятно познакомиться! Сёгуны королевства отдают мне приказы, и я забочусь о том, чтобы быстро и просто распределить их среди всех отрядов, а также подсчитать сильных воинов, готовых к бою! Надеюсь, мы будем ладить! 😊",
         'no_permission': "У вас нет прав на использование этой команды.",
         'language_selected': "Вы выбрали русский язык, отлично!",
         'language_non_exist': "Язык не распознан, в настоящее время доступен только (en, es, ru).",
