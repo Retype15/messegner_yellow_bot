@@ -44,7 +44,7 @@ def get_text(update: Update, key):
             return TEXTS[lang].get(key, TEXTS[lang]['default'])
     
     lang = detect_language(update.effective_user.language_code)
-    return TEXTS[lang].get(key, TEXTS[lang]['default'].format(key))
+    return TEXTS[lang].get(key, TEXTS[lang]['default'].format(error=key))
 
 def guardar_datos_csv():
     with open('grupos_data.csv', mode='w', newline='', encoding='utf-8') as file:
