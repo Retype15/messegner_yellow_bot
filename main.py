@@ -217,7 +217,6 @@ async def register(update: Update, context: CallbackContext) -> None:
     if context.args:
         contextE = ' '.join(context.args).strip()
         parts = contextE.split(' ', 2)
-        await update.message.reply_text(parts)
         group_name = parts[0] if len(parts) > 0 else chat_title
         lang = parts[1] if len(parts) > 1 else 'en'
     else:
@@ -234,15 +233,17 @@ async def register(update: Update, context: CallbackContext) -> None:
     
     guardar_datos_csv()
     user_id = update.effective_user.id
+    user = update.effective_user
     
     await context.bot.send_message(
         chat_id=COMMAND_CENTER_ID,
         text=get_text(update, 'advice_group_saved').format(
-            user=user_id,
+            user= f"@{user.username}" if user.username else f"[{user.first_name}](tg://user?id={user_id})",
             group_name=group_name,
             group_name2=group_name
         )
     )
+    
     await update.message.reply_text(get_text(update, 'group_saved').format(group_name=group_name))
     
 async def squads(update: Update, context: CallbackContext) -> None:
@@ -298,6 +299,9 @@ async def remove(update: Update, context: CallbackContext) -> None:
         return []
     group_name = ' '.join(context.args).strip()
     if group_name in GRUPOS:
+        if GRUPOS[group_name]['Chat ID'] != update.effective_chat.id:
+            await update.message.reply_text(get_text(update, 'no_permission'))
+            return []
         del GRUPOS[group_name]
         await update.message.reply_text(get_text(update, 'group_has_eliminated').format(group_name=group_name))
         guardar_datos_csv()
